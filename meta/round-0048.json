@@ -1,0 +1,31 @@
+{
+  "round_id": 48,
+  "methods": {
+    "q1": "break_even",
+    "q2": "settlement",
+    "q3": "discount",
+    "q4": "revenue",
+    "q5": "discount",
+    "q6": "pct_change",
+    "q7": "weighted_avg",
+    "q8": "break_even",
+    "q9": "settlement",
+    "q10": "ratio_split",
+    "q11": "settlement",
+    "q12": "weighted_avg",
+    "q13": "settlement",
+    "q14": "weighted_avg",
+    "q15": "pct_change",
+    "q16": "series",
+    "q17": "probability",
+    "q18": "discount",
+    "q19": "weighted_avg",
+    "q20": "discount",
+    "q21": "weighted_avg",
+    "q22": "revenue",
+    "q23": "revenue",
+    "q24": "revenue",
+    "q25": "revenue"
+  },
+  "answered_at": "2026-10-15T22:22:27.266194+00:00"
+}
