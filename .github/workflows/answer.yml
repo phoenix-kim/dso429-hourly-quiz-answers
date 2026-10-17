@@ -2,8 +2,10 @@ name: Answer hourly quiz
 
 on:
   schedule:
-    # GitHub may delay scheduled runs; polling every 5 minutes keeps us far inside the 3-hour window.
-    - cron: "*/5 * * * *"
+    # GitHub often delays or skips scheduled runs by hours, so each run stays alive
+    # for ~5.5 hours and polls every 2 minutes. Only one run is active at a time; the
+    # next scheduled run waits in the queue and takes over when the current one ends.
+    - cron: "*/30 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,7 +18,7 @@ concurrency:
 jobs:
   answer:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 350
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
@@ -30,21 +32,21 @@ jobs:
         if: ${{ env.ANTHROPIC_API_KEY != '' }}
         run: pip install --quiet anthropic
 
-      - name: Answer new rounds
-        run: python run.py
-
-      - name: Commit and push
+      - name: Poll for new rounds, answer and push
         run: |
           git config user.name "quiz-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add answers meta
-          if git diff --cached --quiet; then
-            echo "Nothing new."
-            exit 0
-          fi
-          git commit -m "Answers: $(git diff --cached --name-only answers | sed 's#answers/round-##; s#.json##' | tr '\n' ' ')"
-          for i in 1 2 3 4 5; do
-            git pull --rebase -X theirs origin main && git push origin HEAD:main && exit 0
-            sleep 10
+          end=$(( $(date +%s) + 330*60 ))
+          while [ "$(date +%s)" -lt "$end" ]; do
+            git pull -q --rebase origin main || true
+            python run.py || echo "run.py failed; retrying next poll"
+            git add answers meta
+            if ! git diff --cached --quiet; then
+              git commit -q -m "Answers: $(git diff --cached --name-only answers | sed 's#answers/round-##; s#.json##' | tr '\n' ' ')"
+              for i in 1 2 3 4 5; do
+                git pull -q --rebase -X theirs origin main && git push -q origin HEAD:main && break
+                sleep 10
+              done
+            fi
+            sleep 120
           done
-          exit 1
