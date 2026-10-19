@@ -1,0 +1,31 @@
+{
+  "round_id": 86,
+  "methods": {
+    "q1": "ratio_split",
+    "q2": "ratio_split",
+    "q3": "discount",
+    "q4": "discount",
+    "q5": "weighted_avg",
+    "q6": "pct_change",
+    "q7": "pct_change",
+    "q8": "gross_margin",
+    "q9": "fx",
+    "q10": "compound",
+    "q11": "discount",
+    "q12": "fx",
+    "q13": "weighted_avg",
+    "q14": "fx",
+    "q15": "gross_margin",
+    "q16": "discount",
+    "q17": "discount",
+    "q18": "ratio_split",
+    "q19": "ratio_split",
+    "q20": "pct_change",
+    "q21": "gross_margin",
+    "q22": "probability",
+    "q23": "pct_change",
+    "q24": "gross_margin",
+    "q25": "discount"
+  },
+  "answered_at": "2026-10-19T10:03:35.621149+00:00"
+}
